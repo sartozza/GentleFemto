@@ -28,6 +28,8 @@ class ReadDreamFile {
                     const char* addon = "");
   void ReadmTHistos(const char* AnalysisFile, const char* prefix,
                     const char* addon = "");
+  void ReadAndProjectmTHistosBBar(const char* AnalysisFile, const char* prefix,
+                    const char* addon = "", double kcut = 200.);
   void ReaddEtadPhiAtRadHists(const unsigned int nMaxMix,
                               const char* AnalysisFile, const char* prefix,
                               const char* Addon = "");
@@ -38,6 +40,7 @@ class ReadDreamFile {
                                       int iAPart2);
   DreamKayTee* GetmTPairDistributions(int iPart1, int iPart2, int iAPart1,
                                       int iAPart2);
+  DreamKayTee* GetmTPairDistributionsBBar(int iPart1, int iPart2);
   DreamdEtadPhi* GetdEtadPhiDistribution(int iPart1, int iPart2, int iAPart1,
                                          int iAPart2, int imT = 0);
   DreamdEtadPhi* GetdEtadPhiDistributionSingle(int iPart1, int iPart2, int imT = 0);
@@ -54,6 +57,7 @@ class ReadDreamFile {
   TH2F*** fSEMult;
   TH2F*** fSEkT;
   TH2F*** fSEmT;
+  TH1F*** fSEmTProj;
   TH2F**** fSEdEtadPhimT;
   TH2F***** fSEdEtadPhiAtRad;
   TH2F***** fSEdEtadPhiAtRadSmallkStar;

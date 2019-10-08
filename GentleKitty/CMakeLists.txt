@@ -9,8 +9,8 @@ project(GentleKitty)
 # SET PATHS #
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-  SET(GSL_INCLUDE "/usr/local/Cellar/gsl/2.5/include")#where are all GSL related .h files
-  SET(GSL_LIB "/usr/local/Cellar/gsl/2.5/lib")#where are the GSL .a and .so files
+  SET(GSL_INCLUDE "/usr/local/Cellar/gsl/2.6/include")#where are all GSL related .h files
+  SET(GSL_LIB "/usr/local/Cellar/gsl/2.6/lib")#where are the GSL .a and .so files
 else()
   SET(GSL_INCLUDE "/usr/include/gsl")#where are all GSL related .h files
   SET(GSL_LIB "/usr/lib/x86_64-linux-gnu/")#where are the GSL .a and .so files
@@ -65,6 +65,9 @@ set(SRCS
   ${PROJECT_SOURCE_DIR}/SidebandSigma.cxx
   ${PROJECT_SOURCE_DIR}/VariationAnalysis.cxx
   ${PROJECT_SOURCE_DIR}/VariationmTAnalysis.cxx
+  ${PROJECT_SOURCE_DIR}/VariationAnalysispAp.cxx
+  ${PROJECT_SOURCE_DIR}/VariationAnalysispAL.cxx
+  ${PROJECT_SOURCE_DIR}/VariationAnalysisLAL.cxx
   )
 
 set(HEADERS
@@ -77,6 +80,9 @@ set(HEADERS
   ${PROJECT_SOURCE_DIR}/SidebandSigma.h
   ${PROJECT_SOURCE_DIR}/VariationAnalysis.h
   ${PROJECT_SOURCE_DIR}/VariationmTAnalysis.h
+  ${PROJECT_SOURCE_DIR}/VariationAnalysispAp.h
+  ${PROJECT_SOURCE_DIR}/VariationAnalysispAL.h
+  ${PROJECT_SOURCE_DIR}/VariationAnalysisLAL.h
   )
 
 add_library(tidyCATS STATIC ${SRCS})
@@ -169,9 +175,10 @@ target_link_libraries(mTPLAnalysis tidyCATS -L${DREAM_LIB_PATH} DreamFunctions)
 
 add_executable(runPhi ${PROJECT_SOURCE_DIR}/Scripts/pPhi.C)
 target_link_libraries(runPhi tidyCATS -L${DREAM_LIB_PATH} DreamFunctions)
- 
+
 add_executable(radPlotter ${PROJECT_SOURCE_DIR}/Scripts/RadiusDrawer.C)
 target_link_libraries(radPlotter tidyCATS -L${DREAM_LIB_PATH} DreamFunctions)
+<<<<<<< HEAD
  
 add_executable(radPlotterV2 ${PROJECT_SOURCE_DIR}/Scripts/RadiusDrawerPotSep.C)
 target_link_libraries(radPlotterV2 tidyCATS -L${DREAM_LIB_PATH} DreamFunctions)
@@ -179,4 +186,16 @@ target_link_libraries(radPlotterV2 tidyCATS -L${DREAM_LIB_PATH} DreamFunctions)
 add_executable(lambdaPlotter ${PROJECT_SOURCE_DIR}/Scripts/ppAnalysis/LambdaExtractor.C)
 target_link_libraries(lambdaPlotter tidyCATS -L${DREAM_LIB_PATH} DreamFunctions)
  
+=======
+
+add_executable(SysVarExtractor ${PROJECT_SOURCE_DIR}/Scripts/BBarAnalysis/SysVarExtractor.C)
+target_link_libraries(SysVarExtractor tidyCATS -L${DREAM_LIB_PATH} DreamFunctions)
+
+add_executable(SysVarExtractorpAL ${PROJECT_SOURCE_DIR}/Scripts/BBarAnalysis/SysVarExtractorpAL.C)
+target_link_libraries(SysVarExtractorpAL tidyCATS -L${DREAM_LIB_PATH} DreamFunctions)
+
+add_executable(SysVarExtractorLAL ${PROJECT_SOURCE_DIR}/Scripts/BBarAnalysis/SysVarExtractorLAL.C)
+target_link_libraries(SysVarExtractorLAL tidyCATS -L${DREAM_LIB_PATH} DreamFunctions)
+
+>>>>>>> Adding all macros for running fit systematics BBar
 add_subdirectory(Test)
