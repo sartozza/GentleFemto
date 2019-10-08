@@ -178,7 +178,6 @@ target_link_libraries(runPhi tidyCATS -L${DREAM_LIB_PATH} DreamFunctions)
 
 add_executable(radPlotter ${PROJECT_SOURCE_DIR}/Scripts/RadiusDrawer.C)
 target_link_libraries(radPlotter tidyCATS -L${DREAM_LIB_PATH} DreamFunctions)
-<<<<<<< HEAD
  
 add_executable(radPlotterV2 ${PROJECT_SOURCE_DIR}/Scripts/RadiusDrawerPotSep.C)
 target_link_libraries(radPlotterV2 tidyCATS -L${DREAM_LIB_PATH} DreamFunctions)
@@ -186,7 +185,7 @@ target_link_libraries(radPlotterV2 tidyCATS -L${DREAM_LIB_PATH} DreamFunctions)
 add_executable(lambdaPlotter ${PROJECT_SOURCE_DIR}/Scripts/ppAnalysis/LambdaExtractor.C)
 target_link_libraries(lambdaPlotter tidyCATS -L${DREAM_LIB_PATH} DreamFunctions)
  
-=======
+add_subdirectory(Scripts/BBarAnalysis)
 
 add_executable(SysVarExtractor ${PROJECT_SOURCE_DIR}/Scripts/BBarAnalysis/SysVarExtractor.C)
 target_link_libraries(SysVarExtractor tidyCATS -L${DREAM_LIB_PATH} DreamFunctions)
@@ -197,5 +196,4 @@ target_link_libraries(SysVarExtractorpAL tidyCATS -L${DREAM_LIB_PATH} DreamFunct
 add_executable(SysVarExtractorLAL ${PROJECT_SOURCE_DIR}/Scripts/BBarAnalysis/SysVarExtractorLAL.C)
 target_link_libraries(SysVarExtractorLAL tidyCATS -L${DREAM_LIB_PATH} DreamFunctions)
 
->>>>>>> Adding all macros for running fit systematics BBar
 add_subdirectory(Test)
