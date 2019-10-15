@@ -8,32 +8,26 @@
 #include "TStyle.h"
 #include <iostream>
 int main(int argc, char *argv[]) {
-  const char* filename = argv[1];
-  const char* SystFile = argv[2];
-  printf("--- debug 1 ---\n");
+  const char* filename = argv[1];//root file where TTree is saved (should be original binning of default data)
+  const char* SystFile = argv[2];//systematic root file where err.relative fit is stored (!= from original binning)
+  const char* model = argv[3];
+  int selector;
+  TString convmodel = model;
+  if(convmodel=="Lednicky") selector=1;
+  else selector=0;
   TFile* systFile = TFile::Open(SystFile, "read");
   if (!systFile) {
     std::cout << "no syst file " << std::endl;
     return 0;
   }
-  printf("--- debug 2 ---\n");
 
   TF1* systematic = (TF1*) systFile->Get("SystError");
-//  VariationAnalysis* analysis = new VariationAnalysis("hCk_FixShiftedppVar", 26,
-//   81);
-printf("--- debug 3 ---\n");
 
   VariationAnalysispAp* analysis = new VariationAnalysispAp("hCk_ReweightedpApVar");
-  //  VariationAnalysis* analysis = new VariationAnalysis("hCk_ReweightedppVar", 26,
-//                                                      54);
+
   TCut chiSqCut = "chiSqNDF<30";
   analysis->AppendAndCut(chiSqCut);
-//  TCut PolCut = "PolBL==1";
-//  analysis->AppendAndCut(PolCut);
-printf("--- debug 4 ---\n");
   analysis->ReadFitFile(filename);
-  printf("--- debug 5 ---\n");
-
 
   DreamData *ProtonAntiProton = new DreamData("ProtonAntiProton");
   ProtonAntiProton->SetUnitConversionData(1);
@@ -42,23 +36,21 @@ printf("--- debug 4 ---\n");
   ProtonAntiProton->SetSystematics(systematic, 2);
   ProtonAntiProton->FemtoModelFitBands(analysis->GetModel(), 2, 1, 3, -3000, true);
   ProtonAntiProton->FemtoModelDeviations(analysis->GetDeviationByBin(), 2);
-  printf("--- debug 6 ---\n");
+
 
   TCanvas* c_PAP = new TCanvas("CFpAp", "CFpAp", 0, 0, 650, 650);
-//  TCanvas* c_PP = new TCanvas("CFpp", "CFpp", 0, 0, 650, 687.5);
   DreamPlot::SetStyle();
   c_PAP->cd();
   TPad *p1 = new TPad("p1", "p1", 0., 0., 1., 1.);
-//  TPad *p1 = new TPad("p1", "p1", 0., 0.3, 1., 1.);
   p1->SetRightMargin(0.025);
   p1->SetTopMargin(0.025);
-//  p1->SetBottomMargin(0.0);
   p1->SetBottomMargin(0.12);
   p1->Draw();
-  printf("--- debug 7 ---\n");
 
   ProtonAntiProton->SetLegendName("p-#bar{p}", "fpe");
-  ProtonAntiProton->SetLegendName("Coulomb + #chi EFT (fit)", "l");
+  if(selector!=1){
+	  ProtonAntiProton->SetLegendName("Coulomb + #chi EFT (fit)", "l");
+  }else   ProtonAntiProton->SetLegendName("Coulomb + Lednicky-Lyuboshits (fit)", "l");
   ProtonAntiProton->SetRangePlotting(0, 300, 0.725, 3.);
   ProtonAntiProton->SetNDivisions(505);
   ProtonAntiProton->SetLegendCoordinates(
@@ -72,8 +64,6 @@ printf("--- debug 4 ---\n");
   TLatex text;
   BeamText.SetTextSize(gStyle->GetTextSize() * .55);
   BeamText.SetNDC(kTRUE);
-//    BeamText.DrawLatex(0.5, 0.875, "ALICE");
-
   BeamText.DrawLatex(0.32, 0.91, Form("#bf{ALICE}"));
   BeamText.DrawLatex(0.32, 0.85,
                      Form("%s #sqrt{#it{s}} = %i TeV", "pp", (int) 13));
@@ -92,20 +82,16 @@ printf("--- debug 4 ---\n");
 //  p2->SetBottomMargin(0.3);
 //  p2->Draw();
 //  ProtonProton->DrawDeviationPerBin(p2);
-  TFile* out = TFile::Open("tmp.root", "update");
+  TFile* out = TFile::Open(Form("tmp_pAp_%s.root",model), "recreate");
   out->cd();
   c_PAP->Write();
-  c_PAP->SaveAs("CF_pAp_Haide.pdf");
-  printf("--- debug 9---\n");
-
-  systFile->Close();
-  printf("--- debug 10---\n");
+  c_PAP->SaveAs(Form("CF_pAp_%s.pdf", model));
 
   out->Write();
-  printf("--- debug 11---\n");
-
   out->Close();
-  printf("--- debug 12---\n");
+  systFile->Close();
+
+
 
   return 0;
 }

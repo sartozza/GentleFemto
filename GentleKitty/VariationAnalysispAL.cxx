@@ -41,16 +41,13 @@ VariationAnalysispAL::~VariationAnalysispAL() {
 
 void VariationAnalysispAL::ReadFitFile(TString FileName) {
   TFile* tmpFile = TFile::Open(
-      TString::Format("%s/tmp_pAL_%u.root", gSystem->pwd()), "RECREATE");
+      TString::Format("%s/tmp_pAL_0.root", gSystem->pwd()), "RECREATE");
   if (!tmpFile) {
     Error("ReadFitFile", "No Tmp file");
     return;
   }
   TNtuple* Fits = new TNtuple("fitsCurves", "fitsCurves", "kstar:modelValue");
    Fits->Write();
-
-  printf("--- debug 6 ---\n");
-
 
   fInFile = TFile::Open(FileName, "READ");
   if (!fInFile) {
@@ -69,7 +66,7 @@ void VariationAnalysispAL::ReadFitFile(TString FileName) {
 
     int before = resultTree->GetEntriesFast();
     resultTree->Draw(">>myList", fSelector, "entrylist");
-    std::cout << fSelector.GetName() << '\t' << fSelector.GetTitle() << "bla bla"<< std::endl;
+    std::cout << fSelector.GetName() << '\t' << fSelector.GetTitle() << std::endl;
 
     TEntryList *entrList=(TEntryList*)gDirectory->Get("myList");
     if (!entrList) {
@@ -84,8 +81,6 @@ void VariationAnalysispAL::ReadFitFile(TString FileName) {
     if (nEntries == 0) {
       return;
     }
-    printf("--- debug 7 ---\n");
-
     int lastDataVar = -1;
 
     unsigned int dataVar;
@@ -101,7 +96,6 @@ void VariationAnalysispAL::ReadFitFile(TString FileName) {
     resultTree->SetBranchAddress("CorrHist_pAL", &CFHisto_pAL);
     resultTree->SetBranchAddress("FitResultTotal_pAL", &FitCurve_pAL);
 
-    printf("--- debug 8 ---\n");
 
     for (int iEntr = 0; iEntr < nEntries; ++iEntr) {
       resultTree->GetEntry(entrList->GetEntry(iEntr));
@@ -123,13 +117,9 @@ void VariationAnalysispAL::ReadFitFile(TString FileName) {
 
 
     fModel = EvaluateCurves(Fits, refGraph_pAL);
-    printf("--- debug 9 ---\n");
-     printf("--- debug 10 ---\n");
      fModel->SetName("Model_pAL");
      fDeviationByBin = DeviationByBin(fCk.at(0), fModel);
-     printf("--- debug 11 ---\n");
      fDeviationByBin->SetName("DeviationPerBin_pAL");
-     printf("--- debug 12 ---\n");
 
     tmpFile->cd();
     refGraph_pAL->Write();
@@ -146,10 +136,8 @@ TGraphErrors * VariationAnalysispAL::EvaluateCurves(TNtuple * tuple,
   //user needs to delete grOut.
   TGraphErrors* grOut = new TGraphErrors();
   double kVal, Ck;
-  printf("num kstar bins = %i\n",RefGraph->GetN());
   for (int ikstar = 0; ikstar < RefGraph->GetN(); ++ikstar) {
     RefGraph->GetPoint(ikstar, kVal, Ck);
-    printf("ikstar= %i -- kVal = %f ---- Ck =%f\n",ikstar,kVal, Ck);
     tuple->Draw("modelValue >> h",Form("TMath::Abs(kstar - %.3f) < 1e-3", kVal));
 
     TH1F* hist = (TH1F*) gROOT->FindObject("h");

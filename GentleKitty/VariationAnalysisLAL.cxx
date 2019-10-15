@@ -49,8 +49,6 @@ void VariationAnalysisLAL::ReadFitFile(TString FileName) {
   TNtuple* Fits = new TNtuple("fitsCurves", "fitsCurves", "kstar:modelValue");
    Fits->Write();
 
-  printf("--- debug 6 ---\n");
-
 
   fInFile = TFile::Open(FileName, "READ");
   if (!fInFile) {
@@ -69,7 +67,7 @@ void VariationAnalysisLAL::ReadFitFile(TString FileName) {
 
     int before = resultTree->GetEntriesFast();
     resultTree->Draw(">>myList", fSelector, "entrylist");
-    std::cout << fSelector.GetName() << '\t' << fSelector.GetTitle() << "bla bla"<< std::endl;
+    std::cout << fSelector.GetName() << '\t' << fSelector.GetTitle() << std::endl;
 
     TEntryList *entrList=(TEntryList*)gDirectory->Get("myList");
     if (!entrList) {
@@ -84,7 +82,6 @@ void VariationAnalysisLAL::ReadFitFile(TString FileName) {
     if (nEntries == 0) {
       return;
     }
-    printf("--- debug 7 ---\n");
 
     int lastDataVar = -1;
 
@@ -101,7 +98,6 @@ void VariationAnalysisLAL::ReadFitFile(TString FileName) {
     resultTree->SetBranchAddress("CorrHist_LAL", &CFHisto_LAL);
     resultTree->SetBranchAddress("FitResultTotal_LAL", &FitCurve_LAL);
 
-    printf("--- debug 8 ---\n");
 
     for (int iEntr = 0; iEntr < nEntries; ++iEntr) {
       resultTree->GetEntry(entrList->GetEntry(iEntr));
@@ -123,13 +119,9 @@ void VariationAnalysisLAL::ReadFitFile(TString FileName) {
 
 
     fModel = EvaluateCurves(Fits, refGraph_LAL);
-    printf("--- debug 9 ---\n");
-     printf("--- debug 10 ---\n");
      fModel->SetName("Model_LAL");
      fDeviationByBin = DeviationByBin(fCk.at(0), fModel);
-     printf("--- debug 11 ---\n");
      fDeviationByBin->SetName("DeviationPerBin_LAL");
-     printf("--- debug 12 ---\n");
 
     tmpFile->cd();
     refGraph_LAL->Write();
@@ -146,10 +138,8 @@ TGraphErrors * VariationAnalysisLAL::EvaluateCurves(TNtuple * tuple,
   //user needs to delete grOut.
   TGraphErrors* grOut = new TGraphErrors();
   double kVal, Ck;
-  printf("num kstar bins = %i\n",RefGraph->GetN());
   for (int ikstar = 0; ikstar < RefGraph->GetN(); ++ikstar) {
     RefGraph->GetPoint(ikstar, kVal, Ck);
-    printf("ikstar= %i -- kVal = %f ---- Ck =%f\n",ikstar,kVal, Ck);
     tuple->Draw("modelValue >> h",Form("TMath::Abs(kstar - %.3f) < 1e-3", kVal));
 
     TH1F* hist = (TH1F*) gROOT->FindObject("h");

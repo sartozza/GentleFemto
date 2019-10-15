@@ -10,30 +10,25 @@
 int main(int argc, char *argv[]) {
   const char* filename = argv[1];
   const char* SystFile = argv[2];
-  printf("--- debug 1 ---\n");
+  const char* model = argv[3];
+  int selector;
+  TString convmodel = model;
+  if(convmodel=="Lednicky") selector=1;
+  else selector=0;
   TFile* systFile = TFile::Open(SystFile, "read");
   if (!systFile) {
     std::cout << "no syst file " << std::endl;
     return 0;
   }
-  printf("--- debug 2 ---\n");
 
   TF1* systematic = (TF1*) systFile->Get("SystError");
-//  VariationAnalysis* analysis = new VariationAnalysis("hCk_FixShiftedppVar", 26,
-//   81);
-printf("--- debug 3 ---\n");
+
 
   VariationAnalysispAL* analysis = new VariationAnalysispAL("hCk_ReweightedpALVar");
-  //  VariationAnalysis* analysis = new VariationAnalysis("hCk_ReweightedppVar", 26,
-//                                                      54);
+
   TCut chiSqCut = "chiSqNDF<30";
   analysis->AppendAndCut(chiSqCut);
-//  TCut PolCut = "PolBL==1";
-//  analysis->AppendAndCut(PolCut);
-printf("--- debug 4 ---\n");
   analysis->ReadFitFile(filename);
-  printf("--- debug 5 ---\n");
-
 
   DreamData *ProtonAntiLambda = new DreamData("ProtonAntiLambda");
   ProtonAntiLambda->SetUnitConversionData(1);
@@ -42,20 +37,15 @@ printf("--- debug 4 ---\n");
   ProtonAntiLambda->SetSystematics(systematic, 6);
   ProtonAntiLambda->FemtoModelFitBands(analysis->GetModel(), 2, 1, 3, -3000, true);
   ProtonAntiLambda->FemtoModelDeviations(analysis->GetDeviationByBin(), 2);
-  printf("--- debug 6 ---\n");
 
   TCanvas* c_PAL = new TCanvas("CFpAL", "CFpAL", 0, 0, 650, 650);
-//  TCanvas* c_PP = new TCanvas("CFpp", "CFpp", 0, 0, 650, 687.5);
   DreamPlot::SetStyle();
   c_PAL->cd();
   TPad *p1 = new TPad("p1", "p1", 0., 0., 1., 1.);
-//  TPad *p1 = new TPad("p1", "p1", 0., 0.3, 1., 1.);
   p1->SetRightMargin(0.025);
   p1->SetTopMargin(0.025);
-//  p1->SetBottomMargin(0.0);
   p1->SetBottomMargin(0.12);
   p1->Draw();
-  printf("--- debug 7 ---\n");
 
   ProtonAntiLambda->SetLegendName("p-#bar{#Lambda} #oplus #bar{p}-#Lambda", "fpe");
   ProtonAntiLambda->SetLegendName("Lednicky-Lyuboshits (fit)", "l");
@@ -72,7 +62,6 @@ printf("--- debug 4 ---\n");
   TLatex text;
   BeamText.SetTextSize(gStyle->GetTextSize() * .55);
   BeamText.SetNDC(kTRUE);
-//    BeamText.DrawLatex(0.5, 0.875, "ALICE");
 
   BeamText.DrawLatex(0.2, 0.91, Form("#bf{ALICE}"));
   BeamText.DrawLatex(0.2, 0.85,
@@ -92,20 +81,13 @@ printf("--- debug 4 ---\n");
 //  p2->SetBottomMargin(0.3);
 //  p2->Draw();
 //  ProtonProton->DrawDeviationPerBin(p2);
-  TFile* out = TFile::Open("tmp_pAl.root", "update");
+  TFile* out = TFile::Open(Form("tmp_pAl_%s.root",model), "recreate");
   out->cd();
   c_PAL->Write();
-  c_PAL->SaveAs("CF_pAL_Haide.pdf");
-  printf("--- debug 9---\n");
-
+  c_PAL->SaveAs(Form("CF_pAL_%s.pdf", model));
   systFile->Close();
-  printf("--- debug 10---\n");
-
   out->Write();
-  printf("--- debug 11---\n");
-
   out->Close();
-  printf("--- debug 12---\n");
 
   return 0;
 }

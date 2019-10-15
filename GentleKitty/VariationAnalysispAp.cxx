@@ -40,8 +40,9 @@ VariationAnalysispAp::~VariationAnalysispAp() {
 }
 
 void VariationAnalysispAp::ReadFitFile(TString FileName) {
+
   TFile* tmpFile = TFile::Open(
-      TString::Format("%s/tmp_%u.root", gSystem->pwd()), "RECREATE");
+      TString::Format("%s/tmp_0_pAp.root", gSystem->pwd()), "RECREATE");
   if (!tmpFile) {
     Error("ReadFitFile", "No Tmp file");
     return;
@@ -49,7 +50,6 @@ void VariationAnalysispAp::ReadFitFile(TString FileName) {
   TNtuple* Fits = new TNtuple("fitsCurves", "fitsCurves", "kstar:modelValue");
    Fits->Write();
 
-  printf("--- debug 6 ---\n");
 
 
   fInFile = TFile::Open(FileName, "READ");
@@ -68,8 +68,9 @@ void VariationAnalysispAp::ReadFitFile(TString FileName) {
 
 
     int before = resultTree->GetEntriesFast();
+    printf("# entries before = %i",before);
     resultTree->Draw(">>myList", fSelector, "entrylist");
-    std::cout << fSelector.GetName() << '\t' << fSelector.GetTitle() << "bla bla"<< std::endl;
+    std::cout << fSelector.GetName() << '\t' << fSelector.GetTitle() << std::endl;
 
     TEntryList *entrList=(TEntryList*)gDirectory->Get("myList");
     if (!entrList) {
@@ -84,7 +85,6 @@ void VariationAnalysispAp::ReadFitFile(TString FileName) {
     if (nEntries == 0) {
       return;
     }
-    printf("--- debug 7 ---\n");
 
     int lastDataVar = -1;
 
@@ -101,10 +101,9 @@ void VariationAnalysispAp::ReadFitFile(TString FileName) {
     resultTree->SetBranchAddress("CorrHist_pAp", &CFHisto_pAp);
     resultTree->SetBranchAddress("FitResultTotal_pAp", &FitCurve_pAp);
 
-    printf("--- debug 8 ---\n");
 
     for (int iEntr = 0; iEntr < nEntries; ++iEntr) {
-      resultTree->GetEntry(entrList->GetEntry(iEntr));
+      resultTree->GetEntry(entrList->GetEntry(iEntr));//This is causing the TList Delete issues
 
       if (!refGraph_pAp) {
         refGraph_pAp = new TGraph(FitCurve_pAp->GetN(), FitCurve_pAp->GetX(),
@@ -123,13 +122,9 @@ void VariationAnalysispAp::ReadFitFile(TString FileName) {
 
 
     fModel = EvaluateCurves(Fits, refGraph_pAp);
-    printf("--- debug 9 ---\n");
-     printf("--- debug 10 ---\n");
      fModel->SetName("Model_pAp");
      fDeviationByBin = DeviationByBin(fCk.at(0), fModel);
-     printf("--- debug 11 ---\n");
      fDeviationByBin->SetName("DeviationPerBin_pAp");
-     printf("--- debug 12 ---\n");
 
     tmpFile->cd();
     refGraph_pAp->Write();
@@ -137,6 +132,7 @@ void VariationAnalysispAp::ReadFitFile(TString FileName) {
     fDeviationByBin->Write();
     tmpFile->Write();
     tmpFile->Close();
+
   }
 }
 
@@ -146,10 +142,8 @@ TGraphErrors * VariationAnalysispAp::EvaluateCurves(TNtuple * tuple,
   //user needs to delete grOut.
   TGraphErrors* grOut = new TGraphErrors();
   double kVal, Ck;
-  printf("num kstar bins = %i\n",RefGraph->GetN());
   for (int ikstar = 0; ikstar < RefGraph->GetN(); ++ikstar) {
     RefGraph->GetPoint(ikstar, kVal, Ck);
-    printf("ikstar= %i -- kVal = %f ---- Ck =%f\n",ikstar,kVal, Ck);
     tuple->Draw("modelValue >> h",Form("TMath::Abs(kstar - %.3f) < 1e-3", kVal));
 
     TH1F* hist = (TH1F*) gROOT->FindObject("h");
