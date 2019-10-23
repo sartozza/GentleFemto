@@ -59,7 +59,7 @@ set(SRCS
   ${PROJECT_SOURCE_DIR}/TidyCats.cxx
   ${PROJECT_SOURCE_DIR}/CATSInput.cxx
   ${PROJECT_SOURCE_DIR}/CATSInputSigma0.cxx
-  ${PROJECT_SOURCE_DIR}/CATSInputBBar.cxx
+#  ${PROJECT_SOURCE_DIR}/CATSInputBBar.cxx
   ${PROJECT_SOURCE_DIR}/CATSLambdaParam.cxx
   ${PROJECT_SOURCE_DIR}/PlayWithCats.cxx
   ${PROJECT_SOURCE_DIR}/SideBandFit.cxx
@@ -75,7 +75,7 @@ set(HEADERS
   ${PROJECT_SOURCE_DIR}/TidyCats.h
   ${PROJECT_SOURCE_DIR}/CATSInput.h
   ${PROJECT_SOURCE_DIR}/CATSInputSigma0.h
-  ${PROJECT_SOURCE_DIR}/CATSInputBBar.h  
+#  ${PROJECT_SOURCE_DIR}/CATSInputBBar.h  
   ${PROJECT_SOURCE_DIR}/CATSLambdaParam.h
   ${PROJECT_SOURCE_DIR}/PlayWithCats.h
   ${PROJECT_SOURCE_DIR}/SideBandFit.h
