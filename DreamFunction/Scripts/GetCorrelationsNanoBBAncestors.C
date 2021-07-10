@@ -316,57 +316,6 @@ void GetCorrelationsNanoBBAncestors(const char* filename,
   ApApNonCommon->ReweightMixedEvent(ApApNonCommon->GetPairFixShifted(0), 0.2, 0.9);
   pApNonCommon->ReweightMixedEvent(pApNonCommon->GetPairFixShifted(0), 0.2, 0.9);
 
-  std::cout << "===========Reweigthing pL common==============" << std::endl;
-    pLCommon->ReweightMixedEvent(pLCommon->GetPairRebinned(iReb), 0.2, 0.9);
-
-    pLNonCommon->Rebin(pLNonCommon->GetPairFixShifted(0), rebinVec[iReb]);
-    pLNonCommon->ReweightMixedEvent(pLNonCommon->GetPairRebinned(iReb), 0.2, 0.9);
-
-    ApALCommon->Rebin(ApALCommon->GetPairFixShifted(0), rebinVec[iReb]);
-    ApALCommon->ReweightMixedEvent(ApALCommon->GetPairRebinned(iReb), 0.2, 0.9);
-
-    ApALNonCommon->Rebin(ApALNonCommon->GetPairFixShifted(0), rebinVec[iReb]);
-    ApALNonCommon->ReweightMixedEvent(ApALNonCommon->GetPairRebinned(iReb), 0.2, 0.9);
-
-    LLCommon->Rebin(LLCommon->GetPairFixShifted(0), rebinVec[iReb]);
-    LLCommon->ReweightMixedEvent(LLCommon->GetPairRebinned(iReb), 0.2, 0.9);
-
-    LLNonCommon->Rebin(LLNonCommon->GetPairFixShifted(0), rebinVec[iReb]);
-    LLNonCommon->ReweightMixedEvent(LLNonCommon->GetPairRebinned(iReb), 0.2, 0.9);
-
-    ALALCommon->Rebin(ALALCommon->GetPairFixShifted(0), rebinVec[iReb]);
-    ALALCommon->ReweightMixedEvent(ALALCommon->GetPairRebinned(iReb), 0.2, 0.9);
-
-    ALALNonCommon->Rebin(ALALNonCommon->GetPairFixShifted(0), rebinVec[iReb]);
-    ALALNonCommon->ReweightMixedEvent(ALALNonCommon->GetPairRebinned(iReb), 0.2, 0.9);
-
-    pALCommon->Rebin(pALCommon->GetPairFixShifted(0), rebinVec[iReb]);
-    pALCommon->ReweightMixedEvent(pALCommon->GetPairRebinned(iReb), 0.2, 0.9);
-
-    ApLCommon->Rebin(ApLCommon->GetPairFixShifted(0), rebinVec[iReb]);
-    ApLCommon->ReweightMixedEvent(ApLCommon->GetPairRebinned(iReb), 0.2, 0.9);
-
-    pALNonCommon->Rebin(pALNonCommon->GetPairFixShifted(0), rebinVec[iReb]);
-    pALNonCommon->ReweightMixedEvent(pALNonCommon->GetPairRebinned(iReb), 0.2, 0.9);
-
-    ApLNonCommon->Rebin(ApLNonCommon->GetPairFixShifted(0), rebinVec[iReb]);
-    ApLNonCommon->ReweightMixedEvent(ApLNonCommon->GetPairRebinned(iReb), 0.2, 0.9);
-
-    LALCommon->Rebin(LALCommon->GetPairFixShifted(0), rebinVec[iReb]);
-    LALCommon->ReweightMixedEvent(LALCommon->GetPairRebinned(iReb), 0.2, 0.9);
-
-    LALNonCommon->Rebin(LALNonCommon->GetPairFixShifted(0), rebinVec[iReb]);
-    LALNonCommon->ReweightMixedEvent(LALNonCommon->GetPairRebinned(iReb), 0.2, 0.9);
-
-  }
-
-  ppCommon->ReweightMixedEvent(ppCommon->GetPairFixShifted(0), 0.2, 0.9);
-  ApApCommon->ReweightMixedEvent(ApApCommon->GetPairFixShifted(0), 0.2, 0.9);
-  pApCommon->ReweightMixedEvent(pApCommon->GetPairFixShifted(0), 0.2, 0.9);
-  ppNonCommon->ReweightMixedEvent(ppNonCommon->GetPairFixShifted(0), 0.2, 0.9);
-  ApApNonCommon->ReweightMixedEvent(ApApNonCommon->GetPairFixShifted(0), 0.2, 0.9);
-  pApNonCommon->ReweightMixedEvent(pApNonCommon->GetPairFixShifted(0), 0.2, 0.9);
-
   // pLCommon->Rebin(pLCommon->GetPair(), 4);
   // pLCommon->Rebin(pLCommon->GetPair(), 5);
   // ApALCommon->Rebin(ApALCommon->GetPair(), 4);

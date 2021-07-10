@@ -89,3 +89,6 @@ target_link_libraries(LALmTAncestors tidyCATS DreamFunctions ForgivingFnct)
 
 add_executable(pApmTAncestors ${PROJECT_SOURCE_DIR}/GetmTVariationspApAncestors.C)
 target_link_libraries(pApmTAncestors tidyCATS DreamFunctions ForgivingFnct)
+
+add_executable(pApmTVariations ${PROJECT_SOURCE_DIR}/GetmTVariationspAp.C)
+target_link_libraries(pApmTVariations tidyCATS DreamFunctions ForgivingFnct)

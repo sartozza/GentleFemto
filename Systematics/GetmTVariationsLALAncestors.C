@@ -14,8 +14,8 @@ int main(int argc, char* argv[]) {
   const char* prefix = argv[2];
   auto CATSinput = new CATSInput();
 //  CATSinput->SetFixedkStarMinBin(true, 0.004);
-  double norm1 = 0.;
-  double norm2 = 6.;
+  double norm1 = 0.18;
+  double norm2 = 0.28;
   CATSinput->SetNormalization(norm1, norm2);
 
   ReadDreamFile* DreamFile = new ReadDreamFile(4, 4);
